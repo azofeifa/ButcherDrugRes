@@ -1,0 +1,3 @@
+
+FTP site: dtaatjes64@seqdata or sftp dtaatjes64@140.226.123.30
+Password for FTP site: crAdreZ4 
