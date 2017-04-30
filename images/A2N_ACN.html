@@ -1,0 +1,262 @@
+
+		<html>
+		  <head>
+		    <meta charset="utf-8">
+		    <title>pyD3</title>
+		    <!-- <link rel="stylesheet" href="scatter.css" charset="utf-8"> -->
+		  </head>
+		  <style>
+		    div.tooltip { 
+		      position: absolute; 
+		      display:inline-block;    
+		      text-align: center;     
+		      padding: 5px;       
+		      font: 28px sans-serif #FFFFFF;    
+		      background: #282828 ; 
+		      color: #FFFFFF;
+		    }
+		    rect {
+		      fill: transparent;
+		      shape-rendering: crispEdges;
+		    }
+		    .axis path,
+		    .axis line {
+		      fill: none;
+		      stroke: rgba(0, 0, 0, 0.1);
+		      shape-rendering: crispEdges;
+		    }
+
+		    .axisLine {
+		      fill: none;
+		      shape-rendering: crispEdges;
+		      stroke: rgba(0, 0, 0, 0.5);
+		      stroke-width: 2px;
+		    }
+		    circle {
+		      fill: steelblue;
+		    }
+		  </style>
+
+		  <body>
+		    <div id="scatter"></div>      
+		    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+		    <script>
+		var data=[[0.032, 2.9, 'ARNT', 'steelblue', 1.0, 3], [0.083, 15.0, 'MECP2', 'steelblue', 1.0, 3], [0.092, 9.543, 'KLF13', 'steelblue', 1.0, 3], [-0.023, 0.477, 'TGIF1', 'steelblue', 1.0, 3], [-0.075, 14.436, 'FOXJ3', 'steelblue', 1.0, 3], [-0.07, 7.944, 'HXD9', 'steelblue', 1.0, 3], [-0.067, 1.902, 'TBX2', 'steelblue', 1.0, 3], [-0.066, 14.913, 'PPARA', 'steelblue', 1.0, 3], [-0.057, 15.0, 'ISL1', 'steelblue', 1.0, 3], [-0.056, 15.0, 'SOX15', 'steelblue', 1.0, 3], [0.043, 4.451, 'TBX1', 'steelblue', 1.0, 3], [-0.072, 5.026, 'THB', 'steelblue', 1.0, 3], [-0.06, 15.0, 'ARI3A', 'steelblue', 1.0, 3], [0.029, 4.478, 'PURA', 'steelblue', 1.0, 3], [0.069, 15.0, 'KLF4', 'steelblue', 1.0, 3], [-0.051, 2.092, 'DLX2', 'steelblue', 1.0, 3], [0.111, 15.0, 'SP4', 'steelblue', 1.0, 3], [-0.046, 11.336, 'PRGR', 'steelblue', 1.0, 3], [-0.066, 5.586, 'FOXP2', 'steelblue', 1.0, 3], [-0.075, 6.466, 'FOXM1', 'steelblue', 1.0, 3], [-0.077, 15.0, 'FOXL1', 'steelblue', 1.0, 3], [0.126, 5.235, 'ATF3', 'steelblue', 1.0, 3], [0.099, 5.815, 'PBX3', 'steelblue', 1.0, 3], [0.203, 14.778, 'ELF2', 'steelblue', 1.0, 3], [0.154, 4.531, 'ELK1', 'steelblue', 1.0, 3], [0.1, 15.0, 'EGR4', 'steelblue', 1.0, 3], [-0.078, 15.0, 'FOXG1', 'steelblue', 1.0, 3], [-0.067, 14.23, 'MSX2', 'steelblue', 1.0, 3], [-0.055, 6.742, 'SOX13', 'steelblue', 1.0, 3], [0.082, 14.724, 'WT1', 'steelblue', 1.0, 3], [0.086, 4.57, 'FOXI1', 'steelblue', 1.0, 3], [-0.075, 9.265, 'FOXJ3', 'steelblue', 1.0, 3], [-0.042, 9.93, 'PAX5', 'steelblue', 1.0, 3], [-0.054, 5.882, 'CDX1', 'steelblue', 1.0, 3], [-0.072, 6.907, 'ARI3A', 'steelblue', 1.0, 3], [0.099, 15.0, 'SP3', 'steelblue', 1.0, 3], [-0.074, 15.0, 'FOXO1', 'steelblue', 1.0, 3], [-0.297, 9.934, 'PITX1', 'steelblue', 1.0, 3], [-0.055, 4.017, 'FOXO4', 'steelblue', 1.0, 3], [0.122, 15.0, 'TFDP1', 'steelblue', 1.0, 3], [-0.046, 15.0, 'SOX10', 'steelblue', 1.0, 3], [-0.06, 15.0, 'RARG', 'steelblue', 1.0, 3], [0.055, 11.573, 'KLF15', 'steelblue', 1.0, 3], [0.114, 15.0, 'SP2', 'steelblue', 1.0, 3], [0.051, 13.656, 'CXXC1', 'steelblue', 1.0, 3], [-0.066, 15.0, 'IKZF1', 'steelblue', 1.0, 3], [-0.069, 4.754, 'FOXP3', 'steelblue', 1.0, 3], [0.068, 14.632, 'SP1', 'steelblue', 1.0, 3], [-0.057, 15.0, 'LEF1', 'steelblue', 1.0, 3], [0.064, 15.0, 'EGR1', 'steelblue', 1.0, 3], [-0.044, 4.022, 'NR1I2', 'steelblue', 1.0, 3], [0.084, 15.0, 'KLF6', 'steelblue', 1.0, 3], [-0.072, 10.039, 'FUBP1', 'steelblue', 1.0, 3], [-0.065, 8.625, 'HXD4', 'steelblue', 1.0, 3], [-0.035, 1.318, 'MAFG', 'steelblue', 1.0, 3], [-0.059, 4.854, 'BPTF', 'steelblue', 1.0, 3], [-0.07, 15.0, 'SRY', 'steelblue', 1.0, 3], [-0.069, 15.0, 'CPEB1', 'steelblue', 1.0, 3], [0.046, 1.152, 'ZN143', 'steelblue', 1.0, 3], [0.03, 13.103, 'TBX15', 'steelblue', 1.0, 3], [-0.092, 15.0, 'THA', 'steelblue', 1.0, 3], [-0.064, 12.676, 'FOXD3', 'steelblue', 1.0, 3], [0.042, 15.0, 'MYF6', 'steelblue', 1.0, 3], [0.058, 15.0, 'KLF16', 'steelblue', 1.0, 3], [-0.05, 15.0, 'VDR', 'steelblue', 1.0, 3], [0.104, 3.812, 'RFX2', 'steelblue', 1.0, 3], [0.174, 9.565, 'THAP1', 'steelblue', 1.0, 3], [0.022, 5.554, 'SPIC', 'steelblue', 1.0, 3], [-0.065, 15.0, 'PRRX2', 'steelblue', 1.0, 3], [0.026, 8.131, 'MNT', 'steelblue', 1.0, 3], [0.076, 3.412, 'NFYA', 'steelblue', 1.0, 3], [-0.047, 14.724, 'RARA', 'steelblue', 1.0, 3], [-0.052, 10.067, 'PRRX1', 'steelblue', 1.0, 3], [0.037, 12.977, 'PAX2', 'steelblue', 1.0, 3], [0.101, 15.0, 'MAZ', 'steelblue', 1.0, 3], [-0.058, 8.785, 'CDX2', 'steelblue', 1.0, 3], [-0.072, 8.491, 'HXC10', 'steelblue', 1.0, 3], [-0.06, 10.738, 'SOX5', 'steelblue', 1.0, 3], [-0.058, 6.842, 'TBX5', 'steelblue', 1.0, 3], [-0.043, 5.298, 'GCR', 'steelblue', 1.0, 3], [0.099, 15.0, 'SP1', 'steelblue', 1.0, 3], [-0.062, 10.582, 'OTX1', 'steelblue', 1.0, 3], [-0.09, 15.0, 'RARB', 'steelblue', 1.0, 3], [-0.019, 0.118, 'UBIP1', 'steelblue', 1.0, 3], [0.034, 14.492, 'ZN148', 'steelblue', 1.0, 3], [-0.061, 15.0, 'NKX25', 'steelblue', 1.0, 3], [-0.079, 15.0, 'HMGA1', 'steelblue', 1.0, 3], [-0.047, 4.103, 'NR1I3', 'steelblue', 1.0, 3], [0.081, 3.868, 'NFYB', 'steelblue', 1.0, 3], [-0.062, 15.0, 'GATA6', 'steelblue', 1.0, 3], [-0.046, 7.56, 'NF2L1', 'steelblue', 1.0, 3], [-0.069, 5.573, 'FOXA3', 'steelblue', 1.0, 3], [0.156, 8.309, 'ETV1', 'steelblue', 1.0, 3], [0.138, 12.85, 'EGR2', 'steelblue', 1.0, 3], [0.079, 6.461, 'ZFX', 'steelblue', 1.0, 3], [-0.072, 3.227, 'LMX1A', 'steelblue', 1.0, 3], [-0.092, 4.826, 'LHX4', 'steelblue', 1.0, 3], [0.237, 7.216, 'TYY1', 'steelblue', 1.0, 3], [-0.028, 2.045, 'SNAI2', 'steelblue', 1.0, 3], [-0.073, 3.496, 'LMX1B', 'steelblue', 1.0, 3], [-0.057, 1.812, 'PO3F3', 'steelblue', 1.0, 3], [-0.073, 3.599, 'GBX1', 'steelblue', 1.0, 3], [-0.07, 3.18, 'SHOX', 'steelblue', 1.0, 3], [-0.049, 1.788, 'ETV2', 'steelblue', 1.0, 3], [0.094, 2.276, 'ATF2', 'steelblue', 1.0, 3], [-0.111, 4.889, 'HXD13', 'steelblue', 1.0, 3], [0.188, 7.786, 'FLI1', 'steelblue', 1.0, 3], [0.195, 5.551, 'ELF1', 'steelblue', 1.0, 3], [-0.057, 3.177, 'FOXJ2', 'steelblue', 1.0, 3], [-0.055, 2.924, 'NANOG', 'steelblue', 1.0, 3], [0.066, 2.367, 'CEBPZ', 'steelblue', 1.0, 3], [-0.063, 2.661, 'GATA3', 'steelblue', 1.0, 3], [-0.084, 3.394, 'HXD12', 'steelblue', 1.0, 3], [0.137, 10.662, 'EGR1', 'steelblue', 1.0, 3], [0.066, 2.65, 'KLF14', 'steelblue', 1.0, 3], [-0.051, 1.101, 'MNX1', 'steelblue', 1.0, 3], [0.074, 3.346, 'ELK3', 'steelblue', 1.0, 3], [-0.08, 2.936, 'LHX3', 'steelblue', 1.0, 3], [-0.07, 2.91, 'PO3F2', 'steelblue', 1.0, 3], [-0.056, 1.647, 'DLX6', 'steelblue', 1.0, 3], [0.076, 3.357, 'AP2B', 'steelblue', 1.0, 3], [-0.054, 1.826, 'PEBB', 'steelblue', 1.0, 3], [0.052, 2.053, 'TFEB', 'steelblue', 1.0, 3], [-0.056, 2.24, 'PAX5', 'steelblue', 1.0, 3], [-0.075, 2.589, 'RX', 'steelblue', 1.0, 3], [-0.065, 1.54, 'FOXD2', 'steelblue', 1.0, 3], [-0.071, 4.103, 'HBP1', 'steelblue', 1.0, 3], [-0.046, 1.856, 'NFAC3', 'steelblue', 1.0, 3], [-0.053, 1.226, 'HXA11', 'steelblue', 1.0, 3], [0.057, 3.289, 'PROX1', 'steelblue', 1.0, 3], [-0.128, 1.955, 'FOXC1', 'steelblue', 1.0, 3], [-0.104, 5.119, 'FOXA1', 'steelblue', 1.0, 3], [0.184, 2.278, 'ETV6', 'steelblue', 1.0, 3], [-0.034, 0.803, 'CRX', 'steelblue', 1.0, 3], [-0.065, 2.067, 'DLX5', 'steelblue', 1.0, 3], [-0.168, 2.985, 'GATA1', 'steelblue', 1.0, 3], [0.143, 3.695, 'USF1', 'steelblue', 1.0, 3], [-0.069, 2.376, 'LHX9', 'steelblue', 1.0, 3], [-0.054, 1.8, 'NFAC2', 'steelblue', 1.0, 3], [0.071, 2.205, 'KLF12', 'steelblue', 1.0, 3], [0.113, 5.571, 'ETS2', 'steelblue', 1.0, 3], [-0.073, 3.099, 'FOXF2', 'steelblue', 1.0, 3], [-0.065, 2.231, 'SHOX2', 'steelblue', 1.0, 3], [-0.064, 1.813, 'ISX', 'steelblue', 1.0, 3], [-0.046, 0.706, 'NKX61', 'steelblue', 1.0, 3], [0.09, 2.94, 'NFYC', 'steelblue', 1.0, 3], [0.143, 2.089, 'GABPA', 'steelblue', 1.0, 3], [-0.054, 1.535, 'FOXF1', 'steelblue', 1.0, 3], [0.063, 1.368, 'ATF1', 'steelblue', 1.0, 3], [0.025, 1.644, 'CLOCK', 'steelblue', 1.0, 3], [-0.08, 1.707, 'NFAC1', 'steelblue', 1.0, 3], [-0.049, 1.007, 'NKX31', 'steelblue', 1.0, 3], [-0.118, 1.577, 'FOXC2', 'steelblue', 1.0, 3], [0.034, 1.234, 'TFE3', 'steelblue', 1.0, 3], [-0.037, 0.406, 'HXD11', 'steelblue', 1.0, 3], [0.076, 2.205, 'ZBT7B', 'steelblue', 1.0, 3], [0.033, 2.209, 'EPAS1', 'steelblue', 1.0, 3], [0.131, 3.973, 'ZN639', 'steelblue', 1.0, 3], [-0.058, 2.051, 'BARX2', 'steelblue', 1.0, 3], [-0.083, 0.954, 'PBX1', 'steelblue', 1.0, 3], [0.091, 2.096, 'ARNT2', 'steelblue', 1.0, 3], [-0.049, 1.901, 'GATA4', 'steelblue', 1.0, 3], [-0.067, 2.248, 'MEF2C', 'steelblue', 1.0, 3], [-0.071, 1.947, 'NKX22', 'steelblue', 1.0, 3], [-0.064, 2.298, 'HXB13', 'steelblue', 1.0, 3], [-0.055, 0.877, 'RUNX3', 'steelblue', 1.0, 3], [-0.086, 2.193, 'P73', 'steelblue', 1.0, 3], [0.127, 1.749, 'GABP1', 'steelblue', 1.0, 3], [0.008, 1.479, 'MYCN', 'steelblue', 1.0, 3], [0.039, 0.564, 'USF2', 'steelblue', 1.0, 3], [-0.039, 0.459, 'HXB3', 'steelblue', 1.0, 3], [0.08, 4.055, 'E2F6', 'steelblue', 1.0, 3], [-0.029, 0.838, 'NFIA', 'steelblue', 1.0, 3], [-0.087, 1.855, 'EMX1', 'steelblue', 1.0, 3], [-0.08, 1.832, 'EMX2', 'steelblue', 1.0, 3], [-0.045, 0.434, 'P5F1B', 'steelblue', 1.0, 3], [0.23, 2.086, 'JDP2', 'steelblue', 1.0, 3], [-0.063, 1.426, 'PDX1', 'steelblue', 1.0, 3], [0.078, 1.015, 'ATF7', 'steelblue', 1.0, 3], [-0.053, 1.149, 'MEOX2', 'steelblue', 1.0, 3], [0.107, 3.634, 'NRF1', 'steelblue', 1.0, 3], [0.032, 3.28, 'ASCL2', 'steelblue', 1.0, 3], [-0.043, 0.474, 'IRX3', 'steelblue', 1.0, 3], [-0.061, 1.625, 'JUN', 'steelblue', 1.0, 3], [-0.049, 1.87, 'BRCA1', 'steelblue', 1.0, 3], [-0.039, 0.744, 'NR5A2', 'steelblue', 1.0, 3], [-0.053, 2.142, 'PPARG', 'steelblue', 1.0, 3], [-0.059, 0.899, 'ONEC3', 'steelblue', 1.0, 3], [-0.04, 0.457, 'HXA2', 'steelblue', 1.0, 3], [0.051, 1.089, 'MBD2', 'steelblue', 1.0, 3], [0.067, 0.911, 'CREB5', 'steelblue', 1.0, 3], [0.008, 0.259, 'BHE40', 'steelblue', 1.0, 3], [-0.066, 2.257, 'ZN713', 'steelblue', 1.0, 3], [-0.099, 2.824, 'OTX2', 'steelblue', 1.0, 3], [0.011, 1.127, 'SRBP2', 'steelblue', 1.0, 3], [-0.086, 1.868, 'FOXA2', 'steelblue', 1.0, 3], [-0.047, 0.621, 'DLX1', 'steelblue', 1.0, 3], [-0.077, 1.202, 'TEF', 'steelblue', 1.0, 3], [-0.114, 2.898, 'NFAC4', 'steelblue', 1.0, 3], [0.199, 2.397, 'E4F1', 'steelblue', 1.0, 3], [-0.063, 1.038, 'RAX2', 'steelblue', 1.0, 3], [-0.051, 0.835, 'HNF6', 'steelblue', 1.0, 3], [0.006, 0.419, 'YBOX1', 'steelblue', 1.0, 3], [-0.103, 1.471, 'FOXD1', 'steelblue', 1.0, 3], [-0.051, 0.664, 'ONEC2', 'steelblue', 1.0, 3], [-0.048, 0.878, 'ELF5', 'steelblue', 1.0, 3], [0.105, 0.805, 'ERG', 'steelblue', 1.0, 3], [-0.06, 1.251, 'DMBX1', 'steelblue', 1.0, 3], [-0.058, 1.236, 'DLX4', 'steelblue', 1.0, 3], [0.133, 3.648, 'RFX4', 'steelblue', 1.0, 3], [-0.064, 1.831, 'GATA1', 'steelblue', 1.0, 3], [-0.052, 0.642, 'GATA5', 'steelblue', 1.0, 3], [-0.068, 1.481, 'ZFHX3', 'steelblue', 1.0, 3], [-0.086, 1.715, 'PITX2', 'steelblue', 1.0, 3], [-0.031, 0.086, 'HXC8', 'steelblue', 1.0, 3], [-0.053, 0.807, 'EVX2', 'steelblue', 1.0, 3], [-0.064, 1.363, 'GSX2', 'steelblue', 1.0, 3], [-0.06, 0.777, 'PO2F2', 'steelblue', 1.0, 3], [0.044, 2.55, 'PLAG1', 'steelblue', 1.0, 3], [-0.068, 0.818, 'BSH', 'steelblue', 1.0, 3], [0.093, 0.933, 'CREM', 'steelblue', 1.0, 3], [-0.068, 1.089, 'GSX1', 'steelblue', 1.0, 3], [-0.029, 0.119, 'TEAD3', 'steelblue', 1.0, 3], [-0.049, 0.932, 'FOXO3', 'steelblue', 1.0, 3], [-0.035, 1.708, 'ESR2', 'steelblue', 1.0, 3], [-0.066, 0.804, 'BARH1', 'steelblue', 1.0, 3], [0.077, 2.19, 'NR0B1', 'steelblue', 1.0, 3], [0.136, 2.468, 'AP2D', 'steelblue', 1.0, 3], [-0.083, 1.147, 'ALX1', 'steelblue', 1.0, 3], [-0.067, 0.922, 'CEBPA', 'steelblue', 1.0, 3], [-0.016, 0.259, 'MYB', 'steelblue', 1.0, 3], [-0.057, 1.09, 'GATA6', 'steelblue', 1.0, 3], [-0.036, 0.268, 'CEBPG', 'steelblue', 1.0, 3], [-0.089, 1.298, 'ISL2', 'steelblue', 1.0, 3], [-0.087, 1.355, 'SOX3', 'steelblue', 1.0, 3], [-0.083, 1.461, 'FOXQ1', 'steelblue', 1.0, 3], [0.028, 0.611, 'BHE41', 'steelblue', 1.0, 3], [-0.064, 1.189, 'HMX3', 'steelblue', 1.0, 3], [-0.028, 0.145, 'OVOL1', 'steelblue', 1.0, 3], [-0.082, 1.766, 'MEF2A', 'steelblue', 1.0, 3], [0.054, 3.024, 'ZIC1', 'steelblue', 1.0, 3], [0.054, 3.024, 'ZIC2', 'steelblue', 1.0, 3], [-0.048, 0.588, 'HXA10', 'steelblue', 1.0, 3], [-0.088, 1.121, 'FOXB1', 'steelblue', 1.0, 3], [0.048, 1.046, 'NFKB1', 'steelblue', 1.0, 3], [-0.063, 2.105, 'NOBOX', 'steelblue', 1.0, 3], [-0.041, 0.289, 'LHX2', 'steelblue', 1.0, 3], [-0.072, 1.257, 'ZN333', 'steelblue', 1.0, 3], [0.106, 2.022, 'ZEP2', 'steelblue', 1.0, 3], [-0.001, 0.507, 'KLF1', 'steelblue', 1.0, 3], [-0.11, 1.647, 'SMAD2', 'steelblue', 1.0, 3], [0.022, 1.739, 'KLF8', 'steelblue', 1.0, 3], [-0.052, 1.712, 'ZKSC1', 'steelblue', 1.0, 3], [-0.088, 0.483, 'SOX1', 'steelblue', 1.0, 3], [-0.043, 0.484, 'GBX2', 'steelblue', 1.0, 3], [-0.069, 0.943, 'DUXA', 'steelblue', 1.0, 3], [-0.045, 0.482, 'PO3F4', 'steelblue', 1.0, 3], [-0.047, 0.514, 'ESX1', 'steelblue', 1.0, 3], [-0.057, 0.799, 'PIT1', 'steelblue', 1.0, 3], [-0.083, 1.502, 'FIGLA', 'steelblue', 1.0, 3], [-0.019, 0.035, 'MYOD1', 'steelblue', 1.0, 3], [-0.043, 0.442, 'EVX1', 'steelblue', 1.0, 3], [-0.125, 2.087, 'PKNX1', 'steelblue', 1.0, 3], [0.019, 3.191, 'EHF', 'steelblue', 1.0, 3], [-0.068, 0.619, 'NFIL3', 'steelblue', 1.0, 3], [-0.056, 0.734, 'FOSL1', 'steelblue', 1.0, 3], [-0.044, 0.307, 'ARI5B', 'steelblue', 1.0, 3], [-0.06, 0.656, 'PRGR', 'steelblue', 1.0, 3], [-0.054, 0.324, 'BATF', 'steelblue', 1.0, 3], [-0.041, 0.458, 'GFI1', 'steelblue', 1.0, 3], [-0.057, 0.819, 'TGIF2', 'steelblue', 1.0, 3], [-0.105, 0.648, 'PAX7', 'steelblue', 1.0, 3], [-0.084, 0.975, 'BHE22', 'steelblue', 1.0, 3], [0.069, 2.047, 'EHF', 'steelblue', 1.0, 3], [-0.005, 0.237, 'CTCFL', 'steelblue', 1.0, 3], [-0.051, 0.466, 'AIRE', 'steelblue', 1.0, 3], [0.046, 0.807, 'ZN589', 'steelblue', 1.0, 3], [-0.008, 0.416, 'MAF', 'steelblue', 1.0, 3], [-0.046, 0.744, 'GATA2', 'steelblue', 1.0, 3], [0.018, 1.757, 'ZEB1', 'steelblue', 1.0, 3], [-0.055, 0.34, 'HXB6', 'steelblue', 1.0, 3], [-0.005, 0.485, 'ZN740', 'steelblue', 1.0, 3], [-0.002, 1.448, 'SNAI1', 'steelblue', 1.0, 3], [-0.101, 0.572, 'PAX3', 'steelblue', 1.0, 3], [-0.084, 1.198, 'TBP', 'steelblue', 1.0, 3], [0.101, 1.287, 'HEN1', 'steelblue', 1.0, 3], [-0.016, 0.091, 'ERR1', 'steelblue', 1.0, 3], [-0.063, 0.754, 'BARH2', 'steelblue', 1.0, 3], [0.097, 2.978, 'SPDEF', 'steelblue', 1.0, 3], [-0.022, 0.039, 'SUH', 'steelblue', 1.0, 3], [-0.052, 0.323, 'OLIG3', 'steelblue', 1.0, 3], [-0.021, 0.005, 'DBP', 'steelblue', 1.0, 3], [-0.039, 0.543, 'RUNX1', 'steelblue', 1.0, 3], [0.067, 0.911, 'ATF6A', 'steelblue', 1.0, 3], [-0.052, 0.704, 'PO4F1', 'steelblue', 1.0, 3], [-0.065, 0.466, 'TBX21', 'steelblue', 1.0, 3], [0.137, 1.753, 'SPZ1', 'steelblue', 1.0, 3], [-0.135, 0.983, 'MEF2B', 'steelblue', 1.0, 3], [-0.059, 0.874, 'HMBX1', 'steelblue', 1.0, 3], [0.011, 0.635, 'TFAP4', 'steelblue', 1.0, 3], [-0.084, 1.524, 'HXC12', 'steelblue', 1.0, 3], [0.318, 2.276, 'KAISO', 'steelblue', 1.0, 3], [-0.05, 0.675, 'HMX2', 'steelblue', 1.0, 3], [-0.092, 1.688, 'HES7', 'steelblue', 1.0, 3], [-0.033, 0.694, 'HTF4', 'steelblue', 1.0, 3], [-0.008, 0.065, 'HXA7', 'steelblue', 1.0, 3], [-0.075, 1.259, 'HES5', 'steelblue', 1.0, 3], [0.13, 1.105, 'ZIC4', 'steelblue', 1.0, 3], [-0.055, 0.472, 'PHX2B', 'steelblue', 1.0, 3], [-0.055, 0.472, 'ALX3', 'steelblue', 1.0, 3], [-0.055, 0.472, 'PHX2A', 'steelblue', 1.0, 3], [0.211, 2.314, 'HIF1A', 'steelblue', 1.0, 3], [-0.085, 1.1, 'ATOH1', 'steelblue', 1.0, 3], [-0.026, 0.097, 'GFI1B', 'steelblue', 1.0, 3], [-0.053, 0.794, 'HXD8', 'steelblue', 1.0, 3], [-0.074, 0.99, 'SMAD4', 'steelblue', 1.0, 3], [-0.026, 0.059, 'PBX2', 'steelblue', 1.0, 3], [-0.064, 0.25, 'NR2E1', 'steelblue', 1.0, 3], [-0.077, 0.572, 'TBR1', 'steelblue', 1.0, 3], [-0.028, 0.082, 'TFCP2', 'steelblue', 1.0, 3], [0.07, 0.673, 'CREB1', 'steelblue', 1.0, 3], [-0.021, 0.014, 'LHX8', 'steelblue', 1.0, 3], [-0.072, 0.47, 'MAFK', 'steelblue', 1.0, 3], [-0.025, 0.034, 'SOX17', 'steelblue', 1.0, 3], [-0.001, 0.232, 'HAND1', 'steelblue', 1.0, 3], [-0.029, 0.131, 'CTCF', 'steelblue', 1.0, 3], [0.139, 1.688, 'CR3L1', 'steelblue', 1.0, 3], [0.024, 0.761, 'RFX3', 'steelblue', 1.0, 3], [-0.032, 0.086, 'EVI1', 'steelblue', 1.0, 3], [-0.069, 1.091, 'PROP1', 'steelblue', 1.0, 3], [-0.072, 0.813, 'DLX3', 'steelblue', 1.0, 3], [0.045, 0.906, 'KAISO', 'steelblue', 1.0, 3], [-0.041, 0.101, 'TF7L1', 'steelblue', 1.0, 3], [-0.089, 0.839, 'ETV3', 'steelblue', 1.0, 3], [-0.116, 1.506, 'HOMEZ', 'steelblue', 1.0, 3], [-0.053, 0.273, 'OLIG2', 'steelblue', 1.0, 3], [-0.03, 0.2, 'TWST1', 'steelblue', 1.0, 3], [-0.027, 0.172, 'PO2F1', 'steelblue', 1.0, 3], [0.026, 0.418, 'PLAL1', 'steelblue', 1.0, 3], [-0.061, 0.578, 'NGN2', 'steelblue', 1.0, 3], [-0.052, 0.263, 'MAFF', 'steelblue', 1.0, 3], [-0.044, 0.253, 'HXB8', 'steelblue', 1.0, 3], [0.067, 0.57, 'GSC2', 'steelblue', 1.0, 3], [-0.09, 0.987, 'MCR', 'steelblue', 1.0, 3], [-0.068, 1.089, 'PO3F1', 'steelblue', 1.0, 3], [-0.05, 0.364, 'DRGX', 'steelblue', 1.0, 3], [-0.05, 0.364, 'UNC4', 'steelblue', 1.0, 3], [-0.028, 0.099, 'SOX9', 'steelblue', 1.0, 3], [-0.081, 1.281, 'PRD14', 'steelblue', 1.0, 3], [-0.027, 0.074, 'HNF4A', 'steelblue', 1.0, 3], [-0.095, 1.167, 'VDR', 'steelblue', 1.0, 3], [-0.118, 0.547, 'ZSC16', 'steelblue', 1.0, 3], [-0.047, 0.448, 'MEF2D', 'steelblue', 1.0, 3], [-0.035, 0.212, 'NR2C1', 'steelblue', 1.0, 3], [-0.057, 1.554, 'SPIB', 'steelblue', 1.0, 3], [-0.036, 0.454, 'ERR2', 'steelblue', 1.0, 3], [-0.036, 0.454, 'ERR3', 'steelblue', 1.0, 3], [-0.036, 0.454, 'STF1', 'steelblue', 1.0, 3], [-0.115, 1.016, 'HXB7', 'steelblue', 1.0, 3], [-0.115, 1.016, 'HXA5', 'steelblue', 1.0, 3], [0.161, 1.637, 'STAT3', 'steelblue', 1.0, 3], [-0.056, 0.417, 'ALX4', 'steelblue', 1.0, 3], [0.069, 0.804, 'DPRX', 'steelblue', 1.0, 3], [-0.094, 0.944, 'RORA', 'steelblue', 1.0, 3], [-0.042, 0.299, 'SOX18', 'steelblue', 1.0, 3], [0.019, 0.744, 'PLAG1', 'steelblue', 1.0, 3], [-0.042, 0.158, 'E2F4', 'steelblue', 1.0, 3], [-0.133, 1.238, 'PITX3', 'steelblue', 1.0, 3], [-0.005, 0.281, 'IRF3', 'steelblue', 1.0, 3], [0.084, 2.646, 'MYOG', 'steelblue', 1.0, 3], [-0.047, 0.287, 'MEOX1', 'steelblue', 1.0, 3], [-0.063, 0.952, 'HEY1', 'steelblue', 1.0, 3], [-0.109, 2.28, 'NFKB2', 'steelblue', 1.0, 3], [-0.045, 0.254, 'HSF4', 'steelblue', 1.0, 3], [-0.091, 0.741, 'OLIG1', 'steelblue', 1.0, 3], [-0.103, 1.506, 'ZSCA4', 'steelblue', 1.0, 3], [-0.047, 0.541, 'SRF', 'steelblue', 1.0, 3], [-0.074, 0.89, 'NANOG', 'steelblue', 1.0, 3], [-0.054, 0.718, 'FOSB', 'steelblue', 1.0, 3], [-0.014, 0.092, 'COE1', 'steelblue', 1.0, 3], [0.135, 6.161, 'MAFA', 'steelblue', 1.0, 3], [-0.043, 0.466, 'ZIC3', 'steelblue', 1.0, 3], [-0.086, 0.89, 'BHA15', 'steelblue', 1.0, 3], [-0.153, 0.756, 'SOX7', 'steelblue', 1.0, 3], [-0.059, 0.782, 'STAT6', 'steelblue', 1.0, 3], [-0.024, 0.047, 'BCL6', 'steelblue', 1.0, 3], [-0.061, 0.413, 'RFX5', 'steelblue', 1.0, 3], [-0.034, 0.183, 'PPARG', 'steelblue', 1.0, 3], [-0.083, 0.586, 'HMGA2', 'steelblue', 1.0, 3], [-0.075, 0.677, 'HXB2', 'steelblue', 1.0, 3], [-0.032, 0.29, 'STA5B', 'steelblue', 1.0, 3], [0.057, 1.616, 'TLX1', 'steelblue', 1.0, 3], [-0.086, 1.227, 'NKX32', 'steelblue', 1.0, 3], [-0.041, 0.368, 'TF7L2', 'steelblue', 1.0, 3], [-0.085, 1.623, 'TFE2', 'steelblue', 1.0, 3], [-0.091, 1.998, 'PKNX2', 'steelblue', 1.0, 3], [-0.08, 1.067, 'HMX1', 'steelblue', 1.0, 3], [-0.072, 1.163, 'NKX23', 'steelblue', 1.0, 3], [-0.03, 0.102, 'CEBPB', 'steelblue', 1.0, 3], [-0.051, 1.277, 'BC11A', 'steelblue', 1.0, 3], [-0.05, 0.434, 'HME1', 'steelblue', 1.0, 3], [-0.047, 0.459, 'TEAD4', 'steelblue', 1.0, 3], [-0.078, 0.7, 'VAX2', 'steelblue', 1.0, 3], [-0.016, 0.179, 'MZF1', 'steelblue', 1.0, 3], [-0.023, 0.022, 'JUND', 'steelblue', 1.0, 3], [-0.032, 0.128, 'FOS', 'steelblue', 1.0, 3], [-0.045, 0.333, 'VSX2', 'steelblue', 1.0, 3], [-0.053, 0.842, 'NR4A2', 'steelblue', 1.0, 3], [-0.072, 0.692, 'HXA1', 'steelblue', 1.0, 3], [-0.11, 1.177, 'TLX1', 'steelblue', 1.0, 3], [-0.049, 0.85, 'COT1', 'steelblue', 1.0, 3], [-0.059, 0.371, 'SCRT1', 'steelblue', 1.0, 3], [-0.042, 0.305, 'NKX62', 'steelblue', 1.0, 3], [-0.011, 0.083, 'TAL1', 'steelblue', 1.0, 3], [-0.007, 0.126, 'RFX1', 'steelblue', 1.0, 3], [-0.016, 0.073, 'SRBP1', 'steelblue', 1.0, 3], [-0.056, 0.546, 'PRDM1', 'steelblue', 1.0, 3], [-0.008, 0.195, 'IRF8', 'steelblue', 1.0, 3], [-0.014, 0.075, 'NR2E3', 'steelblue', 1.0, 3], [0.001, 0.186, 'PAX8', 'steelblue', 1.0, 3], [0.018, 0.177, 'CREB3', 'steelblue', 1.0, 3], [-0.013, 0.057, 'IRX2', 'steelblue', 1.0, 3], [0.006, 0.483, 'P73', 'steelblue', 1.0, 3], [0.164, 1.464, 'MLXPL', 'steelblue', 1.0, 3], [-0.009, 0.417, 'FEV', 'steelblue', 1.0, 3], [-0.078, 0.967, 'NOTO', 'steelblue', 1.0, 3], [-0.06, 0.556, 'ANDR', 'steelblue', 1.0, 3], [0.023, 0.29, 'REST', 'steelblue', 1.0, 3], [0.023, 0.835, 'COT2', 'steelblue', 1.0, 3], [-0.004, 0.337, 'NKX28', 'steelblue', 1.0, 3], [-0.04, 0.21, 'ARX', 'steelblue', 1.0, 3], [0.095, 0.43, 'ELK4', 'steelblue', 1.0, 3], [-0.036, 0.145, 'BHE23', 'steelblue', 1.0, 3], [-0.03, 0.061, 'XBP1', 'steelblue', 1.0, 3], [-0.002, 0.228, 'HXD10', 'steelblue', 1.0, 3], [-0.191, 1.336, 'MLX', 'steelblue', 1.0, 3], [-0.045, 0.339, 'MIXL1', 'steelblue', 1.0, 3], [-0.411, 1.461, 'E2F2', 'steelblue', 1.0, 3], [-0.133, 0.878, 'SOX11', 'steelblue', 1.0, 3], [-0.076, 0.67, 'ESR1', 'steelblue', 1.0, 3], [0.031, 0.701, 'GSC', 'steelblue', 1.0, 3], [-0.03, 0.104, 'MSX1', 'steelblue', 1.0, 3], [-0.107, 1.151, 'PO6F1', 'steelblue', 1.0, 3], [-0.073, 0.475, 'RORG', 'steelblue', 1.0, 3], [-0.094, 1.024, 'SOX8', 'steelblue', 1.0, 3], [-0.03, 0.242, 'NR4A1', 'steelblue', 1.0, 3], [-0.094, 0.881, 'SOX21', 'steelblue', 1.0, 3], [-0.088, 0.89, 'CDC5L', 'steelblue', 1.0, 3], [-0.048, 0.42, 'RELB', 'steelblue', 1.0, 3], [-0.056, 0.647, 'VSX1', 'steelblue', 1.0, 3], [-0.104, 1.607, 'GLI3', 'steelblue', 1.0, 3], [-0.047, 1.569, 'RREB1', 'steelblue', 1.0, 3], [-0.03, 0.1, 'TF65', 'steelblue', 1.0, 3], [-0.13, 0.191, 'CENPB', 'steelblue', 1.0, 3], [-0.008, 0.075, 'NR1H4', 'steelblue', 1.0, 3], [-0.071, 0.505, 'LHX6', 'steelblue', 1.0, 3], [0.016, 4.035, 'ETV4', 'steelblue', 1.0, 3], [-0.048, 0.413, 'FOXO6', 'steelblue', 1.0, 3], [-0.022, 0.037, 'STA5A', 'steelblue', 1.0, 3], [0.067, 2.086, 'HIC1', 'steelblue', 1.0, 3], [-0.073, 1.145, 'SPI1', 'steelblue', 1.0, 3], [-0.049, 0.323, 'HNF1A', 'steelblue', 1.0, 3], [-0.002, 0.265, 'IRF2', 'steelblue', 1.0, 3], [-0.056, 0.225, 'NDF2', 'steelblue', 1.0, 3], [-0.068, 0.81, 'STAT1', 'steelblue', 1.0, 3], [-0.041, 0.412, 'ID4', 'steelblue', 1.0, 3], [0.005, 0.279, 'ENOA', 'steelblue', 1.0, 3], [0.002, 0.406, 'SMAD3', 'steelblue', 1.0, 3], [-0.024, 0.057, 'AP2A', 'steelblue', 1.0, 3], [0.025, 0.71, 'PPARA', 'steelblue', 1.0, 3], [0.042, 0.55, 'MYC', 'steelblue', 1.0, 3], [-0.089, 0.569, 'HXC13', 'steelblue', 1.0, 3], [0.003, 0.327, 'NR2C2', 'steelblue', 1.0, 3], [-0.088, 0.783, 'PO6F2', 'steelblue', 1.0, 3], [-0.06, 0.517, 'NR1I2', 'steelblue', 1.0, 3], [0.0, 15.0, 'ZN232', 'steelblue', 1.0, 3], [0.057, 0.488, 'MYBA', 'steelblue', 1.0, 3], [-0.038, 0.263, 'MEIS3', 'steelblue', 1.0, 3], [-0.017, 0.046, 'HLTF', 'steelblue', 1.0, 3], [0.02, 0.91, 'GLIS3', 'steelblue', 1.0, 3], [0.003, 0.241, 'ZBTB6', 'steelblue', 1.0, 3], [-0.054, 0.447, 'CEBPD', 'steelblue', 1.0, 3], [-0.08, 1.242, 'VENTX', 'steelblue', 1.0, 3], [-0.107, 0.909, 'TAL1', 'steelblue', 1.0, 3], [-0.086, 1.199, 'GLI1', 'steelblue', 1.0, 3], [-0.061, 0.684, 'NR2F6', 'steelblue', 1.0, 3], [-0.093, 0.745, 'HXA9', 'steelblue', 1.0, 3], [0.108, 0.663, 'GLIS1', 'steelblue', 1.0, 3], [-0.065, 0.176, 'ZBTB4', 'steelblue', 1.0, 3], [-0.013, 0.056, 'THB', 'steelblue', 1.0, 3], [-0.084, 0.817, 'HXA13', 'steelblue', 1.0, 3], [-0.022, 0.018, 'HXC6', 'steelblue', 1.0, 3], [-0.07, 0.463, 'HSF2', 'steelblue', 1.0, 3], [-0.017, 0.028, 'VAX1', 'steelblue', 1.0, 3], [0.014, 0.906, 'AP2C', 'steelblue', 1.0, 3], [0.079, 3.742, 'STAT4', 'steelblue', 1.0, 3], [-0.095, 0.483, 'TBX3', 'steelblue', 1.0, 3], [-0.003, 0.618, 'HIC2', 'steelblue', 1.0, 3], [0.064, 1.573, 'RARA', 'steelblue', 1.0, 3], [0.033, 0.27, 'TFDP1', 'steelblue', 1.0, 3], [0.5, 0.812, 'ZBED1', 'steelblue', 1.0, 3], [-0.005, 0.091, 'PAX6', 'steelblue', 1.0, 3], [-0.013, 0.115, 'FOXH1', 'steelblue', 1.0, 3], [0.103, 1.761, 'BACH1', 'steelblue', 1.0, 3], [-0.042, 0.392, 'IRF1', 'steelblue', 1.0, 3], [-0.037, 0.194, 'PO4F3', 'steelblue', 1.0, 3], [-0.079, 0.457, 'HNF1B', 'steelblue', 1.0, 3], [-0.054, 0.323, 'HXB1', 'steelblue', 1.0, 3], [-0.03, 0.073, 'NR1D1', 'steelblue', 1.0, 3], [-0.002, 0.155, 'MEIS1', 'steelblue', 1.0, 3], [-0.024, 0.023, 'E2F1', 'steelblue', 1.0, 3], [-0.029, 0.086, 'KLF3', 'steelblue', 1.0, 3], [0.155, 1.397, 'TYY2', 'steelblue', 1.0, 3], [0.027, 0.339, 'ZN350', 'steelblue', 1.0, 3], [-0.027, 0.108, 'RUNX2', 'steelblue', 1.0, 3], [-0.055, 0.594, 'PO2F3', 'steelblue', 1.0, 3], [0.026, 0.641, 'HLF', 'steelblue', 1.0, 3], [-0.001, 0.243, 'ZBT7A', 'steelblue', 1.0, 3], [-0.034, 0.188, 'LBX2', 'steelblue', 1.0, 3], [0.014, 0.599, 'ZN652', 'steelblue', 1.0, 3], [-0.006, 0.612, 'MESP1', 'steelblue', 1.0, 3], [-0.041, 0.853, 'ZN219', 'steelblue', 1.0, 3], [0.059, 1.228, 'RXRG', 'steelblue', 1.0, 3], [0.0, 15.0, 'NR1H2', 'steelblue', 1.0, 3], [-0.02, 0.006, 'NFAC1', 'steelblue', 1.0, 3], [0.042, 0.378, 'BMAL1', 'steelblue', 1.0, 3], [-0.04, 0.203, 'HME2', 'steelblue', 1.0, 3], [-0.021, 0.009, 'PAX4', 'steelblue', 1.0, 3], [-0.044, 0.081, 'ZKSC3', 'steelblue', 1.0, 3], [0.073, 1.124, 'DDIT3', 'steelblue', 1.0, 3], [-0.025, 0.056, 'HEY2', 'steelblue', 1.0, 3], [-0.136, 0.649, 'GLIS2', 'steelblue', 1.0, 3], [-0.073, 0.68, 'BATF3', 'steelblue', 1.0, 3], [-0.064, 0.386, 'RHXF1', 'steelblue', 1.0, 3], [0.114, 1.392, 'NRL', 'steelblue', 1.0, 3], [-0.023, 0.046, 'BATF', 'steelblue', 1.0, 3], [0.055, 1.051, 'ETV7', 'steelblue', 1.0, 3], [-0.069, 0.787, 'NDF1', 'steelblue', 1.0, 3], [-0.016, 0.052, 'MYBB', 'steelblue', 1.0, 3], [-0.011, 0.083, 'ZN784', 'steelblue', 1.0, 3], [0.042, 0.925, 'ZEP1', 'steelblue', 1.0, 3], [-0.048, 0.615, 'REL', 'steelblue', 1.0, 3], [-0.073, 0.719, 'GLI2', 'steelblue', 1.0, 3], [0.047, 0.549, 'TF2LX', 'steelblue', 1.0, 3], [0.001, 0.312, 'MEIS2', 'steelblue', 1.0, 3], [-0.02, 0.004, 'TGIF1', 'steelblue', 1.0, 3], [-0.134, 1.255, 'AHR', 'steelblue', 1.0, 3], [-0.071, 0.382, 'INSM1', 'steelblue', 1.0, 3], [-0.014, 0.028, 'E2F7', 'steelblue', 1.0, 3], [-0.113, 1.305, 'SOX2', 'steelblue', 1.0, 3], [-0.11, 0.726, 'HXD3', 'steelblue', 1.0, 3], [-0.0, 0.281, 'ELF3', 'steelblue', 1.0, 3], [-0.047, 0.521, 'THA', 'steelblue', 1.0, 3], [0.035, 0.343, 'CUX1', 'steelblue', 1.0, 3], [-0.069, 0.935, 'NFIC', 'steelblue', 1.0, 3], [-0.026, 0.044, 'TBX19', 'steelblue', 1.0, 3], [-0.036, 0.174, 'TBX4', 'steelblue', 1.0, 3], [-0.019, 0.01, 'STAT2', 'steelblue', 1.0, 3], [0.025, 0.899, 'P63', 'steelblue', 1.0, 3], [0.016, 1.097, 'MAFB', 'steelblue', 1.0, 3], [-0.065, 0.7, 'BCL6B', 'steelblue', 1.0, 3], [-0.066, 0.119, 'E2F3', 'steelblue', 1.0, 3], [0.021, 0.192, 'GCM2', 'steelblue', 1.0, 3], [-0.059, 0.703, 'HNF4G', 'steelblue', 1.0, 3], [0.053, 0.968, 'P63', 'steelblue', 1.0, 3], [-0.043, 0.245, 'SOX4', 'steelblue', 1.0, 3], [-0.129, 0.829, 'PRDM4', 'steelblue', 1.0, 3], [-0.013, 0.086, 'STAT1', 'steelblue', 1.0, 3], [0.001, 0.308, 'TEAD1', 'steelblue', 1.0, 3], [0.014, 0.633, 'MITF', 'steelblue', 1.0, 3], [-0.023, 0.044, 'RXRB', 'steelblue', 1.0, 3], [0.0, 15.0, 'MUSC', 'steelblue', 1.0, 3], [-0.036, 0.284, 'NR4A3', 'steelblue', 1.0, 3], [-0.052, 0.303, 'SCRT2', 'steelblue', 1.0, 3], [0.03, 0.885, 'NR1I3', 'steelblue', 1.0, 3], [0.022, 1.646, 'IRF4', 'steelblue', 1.0, 3], [-0.006, 1.306, 'ITF2', 'steelblue', 1.0, 3], [-0.077, 0.742, 'PO4F2', 'steelblue', 1.0, 3], [-0.017, 0.014, 'IRF5', 'steelblue', 1.0, 3], [-0.08, 0.553, 'NFIA', 'steelblue', 1.0, 3], [0.009, 0.496, 'NKX21', 'steelblue', 1.0, 3], [-0.094, 1.21, 'E2F8', 'steelblue', 1.0, 3], [-0.129, 0.717, 'HXC11', 'steelblue', 1.0, 3], [0.008, 0.768, 'ETS1', 'steelblue', 1.0, 3], [0.003, 0.441, 'COT2', 'steelblue', 1.0, 3], [-0.038, 0.26, 'HSF1', 'steelblue', 1.0, 3], [0.005, 0.179, 'ZBT18', 'steelblue', 1.0, 3], [-0.025, 0.05, 'RXRA', 'steelblue', 1.0, 3], [0.067, 0.562, 'ZBTB4', 'steelblue', 1.0, 3], [-0.069, 0.608, 'PTF1A', 'steelblue', 1.0, 3], [-0.047, 0.452, 'FOSL2', 'steelblue', 1.0, 3], [-0.037, 0.206, 'IRF9', 'steelblue', 1.0, 3], [-0.015, 0.025, 'GCM1', 'steelblue', 1.0, 3], [0.066, 1.497, 'MAFG', 'steelblue', 1.0, 3], [-0.08, 0.309, 'ZN524', 'steelblue', 1.0, 3], [-0.019, 0.021, 'SMRC1', 'steelblue', 1.0, 3], [-0.02, 0.001, 'CR3L2', 'steelblue', 1.0, 3], [-0.053, 0.312, 'ESR2', 'steelblue', 1.0, 3], [-0.086, 0.889, 'PO5F1', 'steelblue', 1.0, 3], [0.028, 0.653, 'RARG', 'steelblue', 1.0, 3], [-0.054, 0.258, 'MGAP', 'steelblue', 1.0, 3], [0.01, 0.259, 'MAX', 'steelblue', 1.0, 3], [-0.005, 0.469, 'IRF7', 'steelblue', 1.0, 3], [0.09, 1.032, 'P53', 'steelblue', 1.0, 3], [-0.005, 0.19, 'ETV5', 'steelblue', 1.0, 3], [0.083, 1.575, 'GMEB2', 'steelblue', 1.0, 3], [0.048, 0.769, 'HSFY1', 'steelblue', 1.0, 3], [-0.016, 0.046, 'NFAT5', 'steelblue', 1.0, 3], [0.011, 0.329, 'GCR', 'steelblue', 1.0, 3], [0.032, 0.63, 'PPARD', 'steelblue', 1.0, 3], [0.04, 0.62, 'ESR1', 'steelblue', 1.0, 3], [-0.025, 0.033, 'CEBPE', 'steelblue', 1.0, 3], [0.06, 0.521, 'BARX1', 'steelblue', 1.0, 3], [-0.113, 0.463, 'E2F5', 'steelblue', 1.0, 3], [0.06, 1.743, 'ZN384', 'steelblue', 1.0, 3], [-0.027, 0.036, 'TBX20', 'steelblue', 1.0, 3], [0.074, 0.812, 'HESX1', 'steelblue', 1.0, 3], [0.03, 0.25, 'FOXK1', 'steelblue', 1.0, 3], [-0.037, 0.255, 'EOMES', 'steelblue', 1.0, 3], [-0.071, 0.156, 'GRHL1', 'steelblue', 1.0, 3], [0.001, 0.247, 'TCF7', 'steelblue', 1.0, 3], [-0.014, 0.077, 'SMAD1', 'steelblue', 1.0, 3], [0.182, 0.331, 'HINFP', 'steelblue', 1.0, 3], [-0.024, 0.047, 'HES1', 'steelblue', 1.0, 3], [-0.014, 0.061, 'ZN282', 'steelblue', 1.0, 3], [-0.006, 0.141, 'JUNB', 'steelblue', 1.0, 3], [-0.17, 0.713, 'PAX2', 'steelblue', 1.0, 3], [-0.105, 0.453, 'MTF1', 'steelblue', 1.0, 3], [-0.065, 0.562, 'NR6A1', 'steelblue', 1.0, 3], [0.034, 0.443, 'NFE2', 'steelblue', 1.0, 3], [0.0, 15.0, 'ZN410', 'steelblue', 1.0, 3], [0.0, 15.0, 'PAX1', 'steelblue', 1.0, 3], [-0.032, 0.144, 'COT1', 'steelblue', 1.0, 3], [0.048, 0.978, 'CUX2', 'steelblue', 1.0, 3], [0.019, 0.376, 'NF2L2', 'steelblue', 1.0, 3], [-0.011, 0.065, 'ERF', 'steelblue', 1.0, 3], [0.006, 0.291, 'MAFK', 'steelblue', 1.0, 3], [-0.029, 0.076, 'EGR3', 'steelblue', 1.0, 3], [0.072, 0.573, 'ZBT49', 'steelblue', 1.0, 3]];
+var title="";
+var fontsize_title=30;
+var tick_xN=10;
+var fontsize_ticks_x=20;
+var tick_yN=10;
+var fontsize_ticks_y=20;
+var xaxis_lbl="";
+var fontsize_label_x=30;
+var yaxis_lbl="";
+var fontsize_label_y=30;
+var xaxis_lbl="MDS Difference (ACN-A2N)";
+var fontsize_label_x=30;
+var yaxis_lbl="-log 10 p-value";
+var fontsize_label_y=30
+		      var margin                  = { top: 100, right: 300, bottom: 100, left: 300 },
+                  outerWidth      = window.innerWidth,
+                  outerHeight     = window.innerHeight,
+                  width           = outerWidth - margin.left - margin.right,
+                  height          = outerHeight - margin.top - margin.bottom;
+
+
+		      var xMin        = d3.min(data, function(d) { return d[0]; });
+		      var xMax        = d3.max(data, function(d) { return d[0]; })
+
+		      var yMin        = d3.min(data, function(d) { return d[1]; });
+		      var yMax        = d3.max(data, function(d) { return d[1]; })
+
+		      var Rx          = 0.05*(xMax - xMin),Ry=0.05*(yMax - yMin)
+
+		      var x           = d3.scale.linear()
+		                          .domain([xMin-Rx, xMax+Rx])
+		                          .range([ 0, width ]) ;
+
+		      var y           = d3.scale.linear()
+		                          .domain([yMin-Ry, yMax+Ry] )
+		                          .range([ height, 0 ]) ;
+
+		      var zoomBeh = d3.behavior.zoom()
+		                      .x(x)
+		                      .y(y)
+		                      .scaleExtent([0, 500])
+		                      .on("zoom", zoom);
+
+		      var svg = d3.select("#scatter")
+		                  .append("svg")
+		                  .attr("width", outerWidth)
+		                  .attr("height", outerHeight)
+		                  .append("g")
+		                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+		                  .call(zoomBeh);
+
+
+		      svg.append("text")
+		        .attr("x", (width / 2))             
+		        .attr("y", 0 - (margin.top / 2))
+		        .attr("text-anchor", "middle")  
+		        .style("font-size", fontsize_title) 
+		        .text(title);
+
+		      // draw the x axis
+		      var xAxis = d3.svg.axis()
+		                    .scale(x)
+		                    .orient('bottom').tickSize(-height).ticks(tick_xN)
+
+		      // draw the y axis
+		      var yAxis = d3.svg.axis()
+		                    .scale(y)
+		                    .orient('left').tickSize(-width).ticks(tick_yN);
+
+		      /*
+		        xaxis and x font tick size
+		      */ 
+
+		      svg.append("g")
+		          .attr("transform", "translate(0," + height + ")")
+		          .classed("x axis", true)
+		          .call(xAxis)
+		          .style("font-size", fontsize_ticks_x)
+		          .append("text")
+		          .classed("labelx", true)
+		          .attr("x", width)
+		          .attr("y", margin.bottom/1.5)
+		          .style("text-anchor", "end")
+		          .text(xaxis_lbl);
+
+		      /*
+		        yaxis and y font tick size
+		      */ 
+
+		      svg.append("g")
+		          .classed("y axis", true)
+		          .call(yAxis)
+		          .style("font-size", fontsize_ticks_y)
+		          .append("text")
+		          .classed("labely", true)
+		          .attr("x", 0)
+		          .attr("y", -margin.bottom )
+		          .attr("transform", "rotate(-90)")
+		          .style("text-anchor", "end")
+		          .text(yaxis_lbl);
+
+		      /*
+		        Set the font size of the x and y labels
+		      */ 
+
+		      svg.selectAll(".labelx")   
+		          .style("font-size", fontsize_label_x + "px");
+
+		      svg.selectAll(".labely")   
+		          .style("font-size", fontsize_label_y + "px");
+
+
+		      svg.append("rect")
+		          .attr("width", width)
+		          .attr("height", height);
+
+		      /*
+		        ticks
+		      */
+		      
+
+		      var tip = d3.tip()
+		          .attr('class', 'd3-tip')
+		          .html(function(d) {
+		            return d[2];
+		          });
+
+		      svg.call(tip);
+
+		      var objects = svg.append("svg")
+		                .classed("objects", true)
+		                .attr("width", width)
+		                .attr("height", height);
+
+		      objects.append("svg:line")
+		              .classed("axisLine hAxisLine", true)
+		              .attr("x1", 0)
+		              .attr("y1", 0)
+		              .attr("x2", width)
+		              .attr("y2", 0)
+		              .attr("transform", "translate(0," + height + ")");
+
+		      objects.append("svg:line")
+		              .classed("axisLine vAxisLine", true)
+		              .attr("x1", 0)
+		              .attr("y1", 0)
+		              .attr("x2", 0)
+		              .attr("y2", height);
+
+		      var div = d3.select("#scatter").append("div") 
+		                  .attr("class", "tooltip")       
+		                  .style("opacity", 0);
+
+		      objects.selectAll(".circle")
+		              .data(data)
+		              .enter().append("circle")
+		              .classed("circle", true)
+		              .attr("transform", transform)
+		              .style("fill", function(d){
+		                return d[3];
+		              })
+		              .style("opacity", function(d){
+		                return d[4];
+		              })      
+		              .attr("r", function(d){
+		                return d[5];
+		              })
+		              .on("mouseover", function(d,i)
+		              {
+		                  d3.select(this).transition()
+		                        .duration(10)   
+		                        .attr("r",d[5]*2);
+		                  d3.select(".d3-tip")
+		                      .transition()
+		                      .duration(600)
+		                      .style("opacity",1);
+		                  div.style("left", d3.event.clientX  + "px")
+		                      .style("top",  d3.event.clientY - 50 + "px")
+		                      .transition()    
+		                      .duration(200)    
+		                      .style("opacity", 1.0)
+		                  div.html(d[2]  )
+		              })
+		              .on("mouseout", function(d,i)
+		              {
+		                  d3.select(this).transition()
+		                        .duration(100)   
+		                        .attr("r",d[5])
+		                  d3.select(".d3-tip")
+		                    .transition()
+		                      .duration(600)
+		                      .style("opacity",0)
+		                  div.transition()    
+		                      .duration(200)    
+		                      .style("opacity", 0); 
+
+		              });
+
+
+		      function zoom() {
+		        svg.select(".x.axis").call(xAxis);
+		        svg.select(".y.axis").call(yAxis);
+
+		        svg.selectAll(".circle")
+		        .attr("transform", transform);
+		      }
+
+		      function transform(d) {
+		        return "translate(" + x(d[0]) + "," + y(d[1]) + ")";
+		      }
+
+
+
+		    </script>
+		  </body>
+		</html>
+		
